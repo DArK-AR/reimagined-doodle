@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_application_1/notification.dart';
 import 'package:flutter_application_1/profile_page.dart';
 import 'package:flutter_application_1/shop.dart';
 import 'package:flutter_application_1/url_launcher.dart';
@@ -85,43 +86,65 @@ class _UserHomeState extends State<UserHome> {
                 child: Icon(Icons.person, color: Colors.black),
               ),
             ),
-            const SizedBox(width: 8),
-            Text(displayName),
           ],
         ),
         actions: [
-          TextButton.icon(
-            icon: const Icon(Icons.upload_file, color: Colors.white),
-            label: const Text('Upload', style: TextStyle(color: Colors.white)),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      VideoUploadAndPlayPage(user: widget.user),
-                ),
-              );
-            },
+          Tooltip(
+            message: 'Notifcations',
+            child: TextButton.icon(
+              icon: Icon(Icons.notifications, color: Colors.white),
+              label: SizedBox.shrink(),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NotificationPage()),
+                );
+              },
+            ),
           ),
-          TextButton.icon(
-            icon: const Icon(Icons.wallet, color: Colors.white),
-            label: const Text('Wallet', style: TextStyle(color: Colors.white)),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const WalletPage()),
-              );
-            },
+          Tooltip(
+            message: "Upload",
+            child: TextButton.icon(
+              icon: const Icon(Icons.upload_file, color: Colors.white),
+              label: SizedBox.shrink(),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        VideoUploadAndPlayPage(user: widget.user),
+                  ),
+                );
+              },
+            ),
           ),
-          TextButton.icon(
-            icon: Icon(Icons.shop, color: Colors.white),
-            label: Text('Shop', style: TextStyle(color: Colors.white)),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ScrollableImagePage()),
-              );
-            },
+          Tooltip(
+            message: "Wallet",
+            child: TextButton.icon(
+              icon: const Icon(Icons.wallet, color: Colors.white),
+              label: SizedBox.shrink(),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const WalletPage()),
+                );
+              },
+            ),
+          ),
+          Tooltip(
+            message: "Sponsored Ads",
+            child: TextButton.icon(
+              icon: Icon(Icons.shop, color: Colors.white),
+              label: SizedBox.shrink(),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ScrollableImagePage(),
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),

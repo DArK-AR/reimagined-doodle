@@ -10,6 +10,9 @@ import 'package:flutter_application_1/firebase_options.dart';
 import 'package:flutter_application_1/home_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// Backround handler must be top-level
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -20,15 +23,6 @@ void main() async {
   );
 
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
-
-  await FirebaseMessaging.instance.requestPermission();
-
-  final token = await FirebaseMessaging.instance.getToken();
-  debugPrint("FCM Token: $token");
-
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    debugPrint("Foreground message: ${message.notification?.title}");
-  });
 
   runApp(MyApp());
 }

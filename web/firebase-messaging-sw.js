@@ -11,3 +11,36 @@ firebase.initializeApp({
 });
 
 const messaging = firebase.messaging();
+
+messaging.onBackgroundMessage(function(multicastMessage) {
+  console.log("Received background message", multicastMessage);
+
+  const notificationTitle = multicastMessage.notification.title;
+  const notificationOptions = {
+    body: multicastMessage.notification.body,
+    icon: "icon.png"
+  };
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
+
+});
+
+// Handle notification click
+self.addEventListener("notificationclick", function(event) {
+  console.log("Notification click:", event.notification.data);
+  event.notification.close();
+
+  event.waitUntil( 
+    clients.matchAll({typeof: "window", includeUncontrolled: true}).then(function(clientList) {
+      for (client of clientList) {
+        if ("focus" in client) {
+          client.postMessage(event.notification.data);
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow("/");
+      }
+    })
+  )
+})
