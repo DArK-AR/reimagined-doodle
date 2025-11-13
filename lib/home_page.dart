@@ -22,7 +22,7 @@ class UserHome extends StatefulWidget {
 }
 
 class _UserHomeState extends State<UserHome> {
-  List<String> videoUrls = [];
+  List<DocumentSnapshot> videoDocs = [];
   bool isLoading = true;
   bool isFetchingMore = false;
   DocumentSnapshot? lastDocument;
@@ -46,13 +46,8 @@ class _UserHomeState extends State<UserHome> {
         ? await query.startAfterDocument(lastDocument!).get()
         : await query.get();
 
-    final urls = snapshot.docs
-        .map((doc) => doc['videoUrl'] as String)
-        .where((url) => url.isNotEmpty)
-        .toList();
-
     setState(() {
-      videoUrls.addAll(urls);
+      videoDocs.addAll(snapshot.docs);
       if (snapshot.docs.isNotEmpty) {
         lastDocument = snapshot.docs.last;
       }
@@ -63,8 +58,6 @@ class _UserHomeState extends State<UserHome> {
 
   @override
   Widget build(BuildContext context) {
-    final displayName = widget.user.displayName ?? 'User';
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -81,7 +74,7 @@ class _UserHomeState extends State<UserHome> {
                   ),
                 );
               },
-              child: CircleAvatar(
+              child: const CircleAvatar(
                 backgroundColor: Colors.white,
                 child: Icon(Icons.person, color: Colors.black),
               ),
@@ -90,10 +83,10 @@ class _UserHomeState extends State<UserHome> {
         ),
         actions: [
           Tooltip(
-            message: 'Notifcations',
+            message: 'Notifications',
             child: TextButton.icon(
-              icon: Icon(Icons.notifications, color: Colors.white),
-              label: SizedBox.shrink(),
+              icon: const Icon(Icons.notifications, color: Colors.white),
+              label: const SizedBox.shrink(),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -106,7 +99,7 @@ class _UserHomeState extends State<UserHome> {
             message: "Upload",
             child: TextButton.icon(
               icon: const Icon(Icons.upload_file, color: Colors.white),
-              label: SizedBox.shrink(),
+              label: const SizedBox.shrink(),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -122,7 +115,7 @@ class _UserHomeState extends State<UserHome> {
             message: "Wallet",
             child: TextButton.icon(
               icon: const Icon(Icons.wallet, color: Colors.white),
-              label: SizedBox.shrink(),
+              label: const SizedBox.shrink(),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -134,8 +127,8 @@ class _UserHomeState extends State<UserHome> {
           Tooltip(
             message: "Sponsored Ads",
             child: TextButton.icon(
-              icon: Icon(Icons.shop, color: Colors.white),
-              label: SizedBox.shrink(),
+              icon: const Icon(Icons.shop, color: Colors.white),
+              label: const SizedBox.shrink(),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -152,7 +145,7 @@ class _UserHomeState extends State<UserHome> {
           ? const Center(child: CircularProgressIndicator())
           : PageView.builder(
               scrollDirection: Axis.vertical,
-              itemCount: videoUrls.length + (videoUrls.length ~/ 3),
+              itemCount: videoDocs.length + (videoDocs.length ~/ 3),
               itemBuilder: (context, index) {
                 final adInterval = 3;
                 final isAdIndex = (index + 1) % (adInterval + 1) == 0;
@@ -160,11 +153,18 @@ class _UserHomeState extends State<UserHome> {
                 if (isAdIndex) {
                   return EffectiveGateAdBanner(viewType: viewType);
                 }
+
                 final videoIndex = index - (index ~/ (adInterval + 1));
+                final videoData =
+                    videoDocs[videoIndex].data() as Map<String, dynamic>;
+
                 return GestureDetector(
                   child: Stack(
                     children: [
-                      VideoPlayerWidget(videoUrl: videoUrls[videoIndex]),
+                      VideoPlayerWidget(
+                        videoUrl: videoData['videoUrl'],
+                        videoId: videoDocs[videoIndex].id,
+                      ),
                       Positioned(
                         top: 20,
                         left: 10,
@@ -174,10 +174,9 @@ class _UserHomeState extends State<UserHome> {
                               backgroundColor: Colors.white,
                               child: Icon(Icons.person, color: Colors.black),
                             ),
-
                             const SizedBox(width: 12),
                             Text(
-                              displayName,
+                              videoData['uploadedBy'] ?? 'Unknown',
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -194,6 +193,73 @@ class _UserHomeState extends State<UserHome> {
                           ],
                         ),
                       ),
+                      Positioned(
+                        right: 20,
+                        top: MediaQuery.of(context).size.height / 2 - 60,
+                        child: StreamBuilder<DocumentSnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('videos')
+                              .doc(videoDocs[videoIndex].id)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) return const SizedBox();
+                            final data =
+                                snapshot.data!.data() as Map<String, dynamic>;
+                            final views = data['views'] ?? 0;
+                            final likes = data['likes'] ?? 0;
+
+                            return Column(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.thumb_up,
+                                    color: Colors.white,
+                                    size: 30,
+                                  ),
+                                  onPressed: () async {
+                                    final uid =
+                                        FirebaseAuth.instance.currentUser!.uid;
+                                    final docRef = FirebaseFirestore.instance
+                                        .collection('videos')
+                                        .doc(videoDocs[videoIndex].id);
+
+                                    final likeDoc = await docRef
+                                        .collection('likes')
+                                        .doc(uid)
+                                        .get();
+                                    if (!likeDoc.exists) {
+                                      await docRef
+                                          .collection('likes')
+                                          .doc(uid)
+                                          .set({
+                                            'likedAt':
+                                                FieldValue.serverTimestamp(),
+                                          });
+                                      await docRef.update({
+                                        'likes': FieldValue.increment(1),
+                                      });
+                                    }
+                                  },
+                                ),
+                                Text(
+                                  "Likes: $likes",
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                const SizedBox(height: 20),
+                                const Icon(
+                                  Icons.remove_red_eye,
+                                  color: Colors.white,
+                                  size: 30,
+                                ),
+                                Text(
+                                  "Views: $views",
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 );
@@ -205,8 +271,14 @@ class _UserHomeState extends State<UserHome> {
 
 class VideoPlayerWidget extends StatefulWidget {
   final String videoUrl;
+  final String
+  videoId; // 👈 add videoId so we know which Firestore doc to update
 
-  const VideoPlayerWidget({super.key, required this.videoUrl});
+  const VideoPlayerWidget({
+    super.key,
+    required this.videoUrl,
+    required this.videoId,
+  });
 
   @override
   State<VideoPlayerWidget> createState() => _VideoPlayerWidgetState();
@@ -216,6 +288,19 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
     with WidgetsBindingObserver {
   late VideoPlayerController _controller;
   bool isVisible = true;
+
+  Future<void> _incrementViews(String videoId) async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final docRef = FirebaseFirestore.instance.collection('videos').doc(videoId);
+
+    final viewDoc = await docRef.collection('views').doc(uid).get();
+    if (!viewDoc.exists) {
+      await docRef.collection('views').doc(uid).set({
+        'viewedAt': FieldValue.serverTimestamp(),
+      });
+      await docRef.update({'views': FieldValue.increment(1)});
+    }
+  }
 
   @override
   void initState() {
@@ -257,6 +342,9 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
           _controller.pause();
         } else if (isVisible && !_controller.value.isPlaying) {
           _controller.play();
+
+          // 👇 call increment without await (fire‑and‑forget)
+          _incrementViews(widget.videoId);
         }
       },
       child: _controller.value.isInitialized

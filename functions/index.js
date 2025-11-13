@@ -29,14 +29,14 @@ setGlobalOptions({
  */
 exports.notifyOnNewVideo = onDocumentCreated("videos/{videoId}", async (event) => {
   const video = event.data.data();
-  const uploaderId = video.userId;
+  const uploaderName = video.uploadedBy;
 
   try {
     // Fetch all user tokens except the uploader
     const tokensSnapshot = await admin.firestore().collection("user_tokens").get();
     const tokens = tokensSnapshot.docs
-      .filter((doc) => doc.id !== uploaderId)
-      .map((doc) => doc.data().token);
+      .map((doc) => doc.data().token)
+      .filter((token) => !!token);
 
 
     if (tokens.length === 0) {
@@ -49,7 +49,7 @@ exports.notifyOnNewVideo = onDocumentCreated("videos/{videoId}", async (event) =
       tokens,
       notification: {
         title: "🎥 New Video Uploaded!",
-        body: `${video.uploaderId} just uploaded a new video.`,
+        body: `${uploaderName} just uploaded a new video.`,
       },
       data: {
         videoUrl: video.videoUrl,

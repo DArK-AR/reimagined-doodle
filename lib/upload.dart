@@ -137,6 +137,8 @@ class _VideoUploadAndPlayPageState extends State<VideoUploadAndPlayPage> {
           'uploadedBy': user.displayName ?? 'Someone',
           'title': 'Uploaded A new Video',
           'discription': 'new videos are coming soon',
+          'likes': 0,
+          'views': 0,
         });
 
         setState(() {
