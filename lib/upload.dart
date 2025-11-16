@@ -99,9 +99,13 @@ class _VideoUploadAndPlayPageState extends State<VideoUploadAndPlayPage> {
         .where('uploadedAt', isLessThan: Timestamp.fromDate(endOfDay))
         .get();
 
-    if (snapshot.size >= 5) {
+    if (snapshot.size >= 2) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('You can only upload 5 videos per day.')),
+        const SnackBar(
+          content: Text(
+            'You uploaded video pay 1 dollar for That to QR Code in sponsored Ads',
+          ),
+        ),
       );
       return;
     }
@@ -135,7 +139,7 @@ class _VideoUploadAndPlayPageState extends State<VideoUploadAndPlayPage> {
           'uploadedAt': Timestamp.now(),
           'userId': user.uid,
           'uploadedBy': user.displayName ?? 'Someone',
-          'title': 'Uploaded A new Video',
+          'title': 'Sponsored',
           'discription': 'new videos are coming soon',
           'likes': 0,
           'views': 0,
@@ -205,7 +209,7 @@ class _VideoUploadAndPlayPageState extends State<VideoUploadAndPlayPage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('Upload & Play Video'),
+          title: Text('Video Upload  Now'),
           backgroundColor: Colors.blue,
         ),
         body: GestureDetector(
@@ -226,7 +230,9 @@ class _VideoUploadAndPlayPageState extends State<VideoUploadAndPlayPage> {
                         borderRadius: BorderRadiusGeometry.circular(8),
                       ),
                     ),
-                    child: Text('Select & Upload Video'),
+                    child: Text(
+                      'Select & Upload Video, charges incur check wallet',
+                    ),
                   ),
                   if (_uploadProgress != null) ...[
                     SizedBox(height: 20),

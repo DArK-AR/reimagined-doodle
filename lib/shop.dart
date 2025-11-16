@@ -108,13 +108,9 @@ class ScrollableImagePage extends StatelessWidget {
                   const Icon(Icons.broken_image, size: 100),
             ),
             SizedBox(height: 20),
-            Text(
-              'Pay some money for usage and services on this platform Sponsored Ad',
-              style: TextStyle(
-                color: Colors.white,
-                backgroundColor: Colors.blue,
-              ),
-            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue, foregroundColor: Colors.white),
+              onPressed: () {}, child: Text('Pay to above code to secure your data Sponsored Ad'))
           ],
         ),
       ),

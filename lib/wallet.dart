@@ -117,7 +117,7 @@ class _WalletPageState extends State<WalletPage> {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      '⚠️ You need at least \$20 in your wallet to withdraw money.',
+                      '⚠️ You have to pay \$1 when 10 videos upload completed, by uploading content on our site, we can send you invoice, and calls to pay your amount',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.redAccent,
@@ -131,7 +131,7 @@ class _WalletPageState extends State<WalletPage> {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      'we pay you through upi and banktransfer with compliance with Our Privacy and Policy',
+                      'You can pay using upi and banktransfer ',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -139,7 +139,7 @@ class _WalletPageState extends State<WalletPage> {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      'WhatsApp your earning Once you reach 20 dollars 7906408246',
+                      'Support Number: 7906408246',
                     ),
                   ],
                 ),

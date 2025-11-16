@@ -108,7 +108,7 @@ Any data, content, or personal information that you choose to share publicly on 
 We do not monitor or control such content and are not liable for any consequences arising from its publication or use by others.
 By sharing data publicly, you acknowledge that it may be visible to other users or third parties, and you accept full responsibility for its impact.
 
-* if you reach your threshold you have to pay charges according to your threshold, And we pay only to selected  sponsered creator if they follow our pivacy and policy.
+* if you reach 1 dollar of upload threshold we have right to send you invoice and personal calls to pay for that, so we can maintain your account.
 ''',
                 style: TextStyle(fontSize: 16),
               ),

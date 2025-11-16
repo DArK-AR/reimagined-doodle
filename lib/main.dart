@@ -1,5 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
-
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_1/auth.dart';
 import 'package:flutter_application_1/firebase_options.dart';
 import 'package:flutter_application_1/home_page.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-// Backround handler must be top-level
-
+// Background handler must be top-level
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +22,7 @@ void main() async {
 
   await FirebaseMessaging.instance.setAutoInitEnabled(true);
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -41,7 +39,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
       ),
-      home: user != null ? UserHome(user: user) : SignUpPage(),
+      home: user != null ? UserHome(user: user) : const SignUpPage(),
     );
   }
 }
@@ -55,43 +53,6 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController referralController = TextEditingController();
-
-  final List<String> smartLinks = [
-    'https://www.effectivegatecpm.com/n1u739xe?key=1152b0a95c6f6011f782ad822526c06d',
-    'https://www.effectivegatecpm.com/phz9jfs3m?key=ea6c354ebd158757f4a4a718ca9bf801',
-    'https://www.effectivegatecpm.com/aid79xw6c?key=ee804a1c0b4abbd53fba6da50422d054',
-    'https://www.effectivegatecpm.com/qumcb8cg1g?key=c2d55d03a9f53f81554fc73ae69b07db',
-    'https://www.effectivegatecpm.com/u9g64jikd2?key=06a2c0cc36ae6d6c9ed4c147c87fe89f',
-  ];
-  int currentLinkIndex = 0;
-  bool canOpenLink = true;
-
-  Future<void> _openSmartLink(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Could not launch $url')));
-    }
-  }
-
-  void _handleSmartLinkTap() async {
-    if (!canOpenLink || currentLinkIndex >= smartLinks.length) return;
-
-    final url = smartLinks[currentLinkIndex];
-    currentLinkIndex++;
-    canOpenLink = false;
-
-    await _openSmartLink(url);
-
-    Future.delayed(Duration(seconds: 60), () {
-      setState(() {
-        canOpenLink = true;
-      });
-    });
-  }
 
   Future<void> syncToken(String userId) async {
     final token = await FirebaseMessaging.instance.getToken();
@@ -126,7 +87,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
         if (refQuery.docs.isNotEmpty) {
           final referrerId = refQuery.docs.first.id;
-
           await FirebaseFirestore.instance
               .collection('referrals')
               .doc(referrerId)
@@ -145,6 +105,7 @@ class _SignUpPageState extends State<SignUpPage> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Signed in as: $email')));
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -156,18 +117,6 @@ class _SignUpPageState extends State<SignUpPage> {
         context,
       ).showSnackBar(SnackBar(content: Text('Sign-in error: $e')));
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        await syncToken(user.uid);
-      }
-    });
   }
 
   @override
@@ -184,46 +133,45 @@ class _SignUpPageState extends State<SignUpPage> {
         title: const Text('Powered by UnicornTech.'),
         backgroundColor: Colors.blue,
       ),
-      body: GestureDetector(
-        onTap: _handleSmartLinkTap,
-        behavior: HitTestBehavior.opaque,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextField(
-                controller: referralController,
-                decoration: InputDecoration(
-                  labelText: 'Referral Code (optional)',
-                  border: OutlineInputBorder(),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: referralController,
+              decoration: const InputDecoration(
+                labelText: 'Referral Code (optional)',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 16,
                 ),
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 32,
-                    vertical: 16,
-                  ),
-                ),
-                onPressed: _signInWithGoogle,
-                child: const Text(
-                  'Sign in with Google',
-                  style: TextStyle(fontSize: 16),
-                ),
+              onPressed: _signInWithGoogle,
+              child: const Text(
+                'Sign in with Google',
+                style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 80),
-              Text(
-                'This site contains ads and link. Using our service your are agree to our Terms and Condition, Use our platform to share your data to publicly.',
-                style: TextStyle(fontSize: 14, color: Colors.black),
-              ),
-              SizedBox(height: 5),
-              Text(
-                'This site may contain 18+ video if you are not under 18+, be in provision zone',
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 40),
+            const Text(
+              'By using our service you agree to our Terms and Conditions.',
+              style: TextStyle(fontSize: 14, color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 5),
+            const Text(
+              'This site may contain 18+ video. If you are under 18, please exit.',
+              style: TextStyle(fontSize: 12),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
       ),
     );
