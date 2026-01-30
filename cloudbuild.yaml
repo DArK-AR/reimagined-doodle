@@ -1,0 +1,3 @@
+serviceAccount: demonpay@appspot.gserviceaccount.com
+options:
+  logging: NONE
