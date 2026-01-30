@@ -19,8 +19,9 @@ class EffectiveGateAdBanner extends StatelessWidget {
         ..style.height = '250px'
         ..setInnerHtml(
           '''
-          <script type='text/javascript' src='//pl26807941.effectivegatecpm.com/df/69/e1/df69e140d9c5f168b2dd245385daa680.js'></script>
-          ''',
+<script async="async" data-cfasync="false" src="https://pl28173098.effectivegatecpm.com/21102189b35ebd0d457674c3afc9cd4f/invoke.js"></script>
+<div id="container-21102189b35ebd0d457674c3afc9cd4f"></div>
+       ''',
           validator: html.NodeValidatorBuilder()
             ..allowElement('script', attributes: ['type', 'src'])
             ..allowHtml5(),

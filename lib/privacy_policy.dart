@@ -39,7 +39,7 @@ class _SmartLinkPageState extends State<SmartLinkPage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: const Text('Privacy Policy'),
+          title: const Text('Smartlink Viewer'),
           backgroundColor: Colors.blue,
         ),
         body: const Center(
@@ -51,21 +51,21 @@ Effective Date: [31/10/2025]
 We value your privacy and are committed to protecting your personal data. This Privacy Policy explains how we handle video uploads, playback, and sharing features on our platform.
 
 1. 📹 Video Upload and Sharing
-Users may upload videos for  to share them to public.
-Uploaded videos are stored securely and are only accessible to other users.
+Users may upload videos for personal use and share them with family and friends.
+Uploaded videos are stored securely and are only accessible to the user and those they choose to share with.
 We do not publicly display or distribute user content without explicit permission.
 
 2. ⏳ Data Retention
 Uploaded videos are retained for a limited period, typically between 7 to 30 days.
 We may delete content at any time, including within 24 hours, based on system policies or user activity.
-Users are responsible for sharing, downloading or backing up their content before it is deleted.
+Users are responsible for downloading or backing up their content before it is deleted.
 
 3. 🔐 Data Security
 We implement reasonable security measures to protect your videos from unauthorized access, alteration, or deletion.
 However, no system is 100% secure. We cannot guarantee absolute protection against data loss or breaches.
 
 4. 👥 Sharing Controls
-Users control  to share content and other permissions.
+Users control who can view their videos by sharing links or access permissions.
 We do not monitor or moderate shared content unless required by law or reported for abuse.
 
 5. 💳 Payment and Refunds
@@ -87,9 +87,7 @@ Users will be notified of significant updates via the platform or email.
 9. 🚫 Third-Party Access and Confidentiality
 We do not share, sell, or disclose your uploaded videos or personal data to any third party without your explicit permission.
 No external party is permitted to view, access, or use your confidential content, including documents, videos, or metadata, unless required by law or authorized by you.
-We maintain strict access controls to ensure your data remains private and secure.
-
-10. 💰 We pay users for uploading content only to our choosen sponsor content Creators not to all creator  and updated data for monitor and analysis.""",
+We maintain strict access controls to ensure your data remains private and secure.""",
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),

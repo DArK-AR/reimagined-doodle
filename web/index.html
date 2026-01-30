@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -18,48 +19,51 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="UnicornTech">
+  <meta name="Deliver Customer Ads by Customer and other users" content="UnicornTech">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="flutter_application_1">
+  <meta name="apple-mobile-web-app-title" content="UnicornTech">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="icon.png"/>
+  <link rel="icon" type="image/png" href="icon.png" />
 
   <title>UnicornTech</title>
   <link rel="manifest" href="manifest.json">
 </head>
+
 <body>
 
   <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js"></script>
 
-  
+
   <script>
     // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+    import { initializeApp } from "firebase/app";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyBW5fiV4iELyylY2map9cUg4fBBguOkodQ",
-  authDomain: "demonpay.firebaseapp.com",
-  projectId: "demonpay",
-  storageBucket: "demonpay.firebasestorage.app",
-  messagingSenderId: "877170767007",
-  appId: "1:877170767007:web:f6449f73ef6843fecf1eaa"
-};
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBW5fiV4iELyylY2map9cUg4fBBguOkodQ",
+      authDomain: "demonpay.firebaseapp.com",
+      projectId: "demonpay",
+      storageBucket: "demonpay.firebasestorage.app",
+      messagingSenderId: "877170767007",
+      appId: "1:877170767007:web:f6449f73ef6843fecf1eaa"
+    };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const messaging = firebase.messaging();
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
   </script>
 
 
   <script src="flutter_bootstrap.js" async></script>
+
 </body>
+
 </html>
