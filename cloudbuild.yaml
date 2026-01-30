@@ -1,3 +1,32 @@
-serviceAccount: demonpay@appspot.gserviceaccount.com
+steps:
+  # Step 1: Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t',
+      'asia-south1-docker.pkg.dev/demonpay/flutter-web/flutter-web:$SHORT_SHA',
+      '.'
+    ]
+
+  # Step 2: Push Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'asia-south1-docker.pkg.dev/demonpay/flutter-web/flutter-web:$SHORT_SHA'
+    ]
+
+  # Step 3: Deploy to Cloud Run (global access)
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: [
+      'run', 'deploy', 'flutter-web-service',
+      '--image', 'asia-south1-docker.pkg.dev/demonpay/flutter-web/flutter-web:$SHORT_SHA',
+      '--region', 'asia-south1',
+      '--platform', 'managed',
+      '--allow-unauthenticated'
+    ]
+
+images:
+  - 'asia-south1-docker.pkg.dev/demonpay/flutter-web/flutter-web:$SHORT_SHA'
+
 options:
-  logging: NONE
+  logging: CLOUD_LOGGING_ONLY
